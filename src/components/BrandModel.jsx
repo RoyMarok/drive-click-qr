@@ -1,4 +1,5 @@
 import React from 'react'
+import { isEqual } from 'lodash'
 import { LabeledAutocomplete } from './autocomplete'
 import { ValueOption } from './value-select'
 
@@ -10,6 +11,14 @@ export class BrandModel extends React.PureComponent {
         filteredOptions: [],
         value: '',
         mode: 'noMatches'
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if (!isEqual(prevState.options, this.props.carList)){
+            this.setState({
+                options: this.props.carList
+            })
+        }
     }
 
     handleChange = (value) => {
