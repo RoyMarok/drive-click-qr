@@ -1,4 +1,4 @@
-import { css } from '@emotion/react'
+import { css } from '@emotion/react/macro'
 import { memoize } from 'lodash'
 
 import {
@@ -22,8 +22,8 @@ import {
     lineHeightBody1,
     fontSizeBody2,
     lineHeightBody2
-} from '../font-sizes.config.style'
-import { baseX } from '../semantic.config.style'
+} from './font-sizes.config.style'
+import { baseX } from './common.config.style'
 
 export const sizes = {
     sm: {

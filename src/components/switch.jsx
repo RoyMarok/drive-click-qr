@@ -17,7 +17,8 @@ export const Switch = ({
             type: 'checkbox',
             disabled: props.disabled,
             onChange: handleChange,
-            form: props.formName
+            form: props.formName,
+            checked: props.value
         }
     )
     return (

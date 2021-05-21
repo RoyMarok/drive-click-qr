@@ -1,88 +1,174 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react'
 import QRCode from 'qrcode.react'
-import { Calculator } from './Calculator'
-import { css } from '@emotion/react/macro'
+import { isEmpty, parseInt } from 'lodash'
+import IMask from 'imask'
+import copy from 'copy-to-clipboard'
+import { withAxios } from 'react-axios'
 
-const style = css({
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column'
-})
+import { ReactComponent as ArrowLeft } from './components/icon/common/ic-24-arrow-left.svg'
+import { Calculator } from './Calculator'
+import { WrapperStyled, QrStyled, NonPrintablePanelStyled, NonPrintableText, PrintablePanelStyled, IconWrapperStyled } from './components/styles/wrapper.style'
+import * as lightTheme from './components/styles/light.theme.style'
+import { makeMoneyMask } from './components/utils'
+import { ButtonClassic } from './components/button'
+import { withLabel } from './components/labeled'
+import { Headline1 } from './components/headline'
+import { Link } from './components/link'
+
+const INITIAL_LOW = 0.2
+const INITIAL_HIGH = 0.9
+
+const urlParams = [
+    'isNewCar',
+    'brand',
+    'model',
+    'carPrice',
+    'downPayment',
+    'durationMonth',
+    'incomeStatement',
+    'programsChildren',
+    'programsFirstCar',
+    'tradeIn'
+]
+
+const LabeledButton = withLabel(ButtonClassic)
+
+const makeUrl = ({ state, partnerSource }) => {
+    const urlParts = urlParams
+            .map(
+                (key) =>
+                (state[key] || state[key] === false) &&
+                `${key}=${state[key]}`)
+            .filter((value) => Boolean(value))
+    return `https://www.sberbank.ru/sms/carloanrequest?downPaymentType=currency${urlParts.length >0 && '&'}${urlParts.join('&')}&source=dealer${partnerSource ? `jjj${partnerSource}` : ''}`
+}
+
 class App extends React.PureComponent {
     state = {
-        isNewCar: true,
+        isNewCar: '',
         brand: '',
         model: '',
-        carPrice: 0,
-        downPayment: 0,
+        carPrice: 1200000,
+        downPayment: 400000,
         durationMonth: 36,
         incomeStatement: false,
         programsChildren: false,
         programsFirstCar: false,
-        tradeIn: false
+        tradeIn: false,
+        errors: {},
+        carList: [],
+        showQR: false,
+        showCalc: true
     }
 
-    handleSetBrand = (brand) => {
+    componentWillMount() {
+        this.props.axios('/car-list.json').then(result => {
+          this.setState({ carList: result.data })
+        })
+      }
+
+    handleChange = (newValues) => {
+        const errors = {}
+        const carPrice = newValues?.carPrice || this.state.carPrice
+        const downPayment = newValues?.downPayment || this.state.downPayment
+        const initialRate = downPayment / carPrice
+        const minInitial = parseInt(carPrice*INITIAL_LOW)
+        const maxInitial = parseInt(carPrice*INITIAL_HIGH)
+        const masked = IMask.createMask(makeMoneyMask({ scale: '0', radix: ' ' }))
+
+        if ( initialRate < INITIAL_LOW) {
+            errors['downPayment'] = `Слишком маленький первоначальный взнос. Меньше ${masked.resolve(String(minInitial))} ₽`
+        } else 
+        if ( initialRate > INITIAL_HIGH) {
+            errors['downPayment'] = `Слишком большой первоначальный взнос. Больше ${masked.resolve(String(maxInitial))} ₽`
+        }
         this.setState({
-            brand
+            ...newValues,
+            errors
         })
     }
-    handleSetModel = (model) => {
+
+    handleShowQR = () => {
+        let stateSetProps = {
+            showQR: true,
+            showCalc: false
+        }
+        if (this.state.isNewCar === '') {
+            stateSetProps = {
+                errors: {
+                    isNewCar: 'Выберете новый или подержаный'
+                }
+            }
+        }
+        this.setState(stateSetProps)
+    }
+
+    handleShowCalc = () => {
         this.setState({
-            model
+            showQR: false,
+            showCalc: true,
+            copy: ''
         })
     }
-    handleSetCarProce = (carPrice) => {
+
+    handleCopyToClipboard = () => {
+        const { location } = this.props
+        const partnerSource = location?.pathname?.substring(1)
+        copy(makeUrl({ state: this.state, partnerSource }))
         this.setState({
-            carPrice
+            copy: 'Скопировано'
         })
     }
-    handleSetDownPayment = (downPayment) => {
-        this.setState({
-            downPayment
-        })
-    }
-    handleSetDurationMonth = (durationMonth) => {
-        this.setState({
-            durationMonth
-        })
+
+    handlePrint = () => {
+        window.print()
     }
 
     render () {
+        const { location } = this.props
+        const partnerSource = location?.pathname?.substring(1)
         const calculatorProps = {
-            brand: this.state.brand,
-            model: this.state.model,
-            carPrice: this.state.carPrice,
-            downPayment: this.state.downPayment,
-            durationMonth: this.state.durationMonth
+            ...this.state,
+            onChange: this.handleChange,
+            errors: this.state.errors,
+            carList: this.state.carList
         }
         
-        const urlParts = Object.keys(this.state)
-            .map(
-                (key) =>
-                (this.state[key] || this.state[key] === false) &&
-                `${key}=${this.state[key]}`)
-            .filter((value) => Boolean(value))
+        const urlSmartLink = makeUrl({ state: this.state, partnerSource })
         const qrProps = {
-            value: `https://www.sberbank.ru/sms/carloanrequest?downPaymentType=currency${urlParts.length >0 && '&'}${urlParts.join('&')}&source=dealer`,
+            value: urlSmartLink,
             renderAs: 'svg',
-            size: 256
+            size: 544
         }
 
-        console.log(
-            'Array',
-            style
-        )
         return (
-            <div css={style}>
-                <Calculator {...calculatorProps} />
-                <QRCode {...qrProps} />
-                <a href={qrProps.value} >{qrProps.value}</a>
-            </div>
+            <WrapperStyled>
+                {this.state.showCalc && <NonPrintablePanelStyled>
+                    <Headline1>Параметры</Headline1>
+                    <Calculator {...calculatorProps} theme={lightTheme} />
+                    <ButtonClassic title="Показать QR-код" fullWidth onClick={this.handleShowQR} />
+                </NonPrintablePanelStyled>}
+                {this.state.showQR && isEmpty(this.state.erros) && <PrintablePanelStyled>
+                    <NonPrintableText>
+                        <IconWrapperStyled>
+                            <ArrowLeft />
+                        </IconWrapperStyled>
+                        
+                        <Link size="lg" colorScheme="primary" fontWeight="semibold" href="#" onClick={this.handleShowCalc} title="Изменить параметры" />
+                    </NonPrintableText>
+                    <QrStyled>
+                        <QRCode {...qrProps} />
+                    </QrStyled>
+                    <NonPrintableText>
+                        <ButtonClassic title="Перейти в СберБанк Online" fullWidth as="a" href={urlSmartLink} target="_blank"/>
+                        <LabeledButton title="Скопировать ссылку" fullWidth mode="secondary" onClick={this.handleCopyToClipboard} error={this.state?.copy} />
+                        <ButtonClassic title="Напечатать QR-код" fullWidth mode="secondary" onClick={this.handlePrint}/>
+                    </NonPrintableText>
+                </PrintablePanelStyled>}
+                
+            </WrapperStyled>
         )
     }
 }
 
-export default App
+export default withAxios(App)

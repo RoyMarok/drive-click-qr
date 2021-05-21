@@ -38,6 +38,7 @@ export const success = successPrimary
 export const infoPrimary = colors.violet5
 export const infoSecondary = colors.violet6
 export const infoTertiary = colors.violet4
+export const infoTransparent60 = colors.hex2rgba(infoPrimary, 60)
 export const infoTransparent40 = colors.hex2rgba(infoPrimary, 40)
 export const infoTransparent24 = colors.hex2rgba(infoPrimary, 24)
 export const infoTransparent16 = colors.hex2rgba(infoPrimary, 16)

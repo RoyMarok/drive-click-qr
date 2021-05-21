@@ -1,4 +1,5 @@
-import { baseX } from './semantic.config.style'
+// import { baseX } from './common.config.style'
+export const baseX = 4
 
 export const fontSizeHeadline1 = '34px'
 export const lineHeightHeadline1 = `${baseX * 10}px`

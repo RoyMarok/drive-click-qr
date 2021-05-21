@@ -2,14 +2,13 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { MarginWrapper } from './styles/margin-wrapper.style'
+import { getDisplayName } from './utils'
 
-import { Info } from './info'
 import {
     HeadlineStyled,
-    DescriptionStyled,
     ErrorStyled,
     LabelStyled
-} from './labeled.style'
+} from './styles/common.config.style'
 
 const mapTypographySize = {
     lg: 'md',
@@ -51,14 +50,12 @@ export const Labeled = ({
                             {label}
                         </LabelStyled>
                     </label>
-                    {tooltip && <Info size={size} {...tooltip} />}
                 </HeadlineStyled>
                 {children}
             </Fragment>
         ) :
             children
         }
-
         {error && <ErrorStyled
             size={mapTypographySize[size]}
             colorScheme="warning"
@@ -67,15 +64,6 @@ export const Labeled = ({
         >
             {error}
         </ErrorStyled>}
-        {description && (
-            <DescriptionStyled
-                size={mapTypographySize[size]}
-                colorScheme="secondary"
-                verticalMargin="micro"
-            >
-                {description}
-            </DescriptionStyled>
-        )}
     </MarginWrapper>
 )
 
@@ -94,4 +82,15 @@ Labeled.propTypes = {
         title: PropTypes.string,
         description: PropTypes.string
     })
+}
+
+export const withLabel = (WrappedComponent) => {
+    const LabeledComponent = ({ className, ...props }) => (
+        <Labeled {...props} className={className}>
+            <WrappedComponent {...props} />
+        </Labeled>
+    )
+
+    LabeledComponent.displayName = `Labeled${getDisplayName(WrappedComponent)}`
+    return LabeledComponent
 }

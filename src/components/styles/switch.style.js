@@ -2,8 +2,8 @@ import styled from '@emotion/styled/macro'
 import { css } from '@emotion/react/macro'
 
 import * as theme from './light.theme.style'
-import { xsShadow, baseX } from './common.config.style'
-import { lineHeightMd } from './font-sizes.config.style'
+import { xsShadow } from './common.config.style'
+import { lineHeightMd, baseX } from './font-sizes.config.style'
 import { mdCheckedSwitchAnimation } from './md-checked-switch-animation.keyframe'
 import { mdUncheckedSwitchAnimation } from './md-unchecked-switch-animation.keyframe'
 
@@ -21,7 +21,7 @@ const checkedSwitchAnimationDuration = '1s'
 const uncheckedSwitchAnimationDuration = '1s'
 
 export const CheckboxTypographyStyled = styled.p(() => css `
-    margin-left: ${lineHeightMd - (3 * baseX)}px;
+    margin-left: 5px;
     color: ${theme.tertiary};
     cursor: pointer;
 `)
@@ -68,12 +68,12 @@ export const InputStyled = styled.input(css `
 
             &:hover ~ ${SwitchStyled} {
                 background-color: ${checkboxColors.switchOffHover};
-                cursor: default;
+
             }
 
             &:active ~ ${SwitchStyled} {
                 background-color: ${checkboxColors.switchOffClick};
-                cursor: default;
+
             }
 
             &:disabled ~ ${SwitchStyled} {
@@ -88,7 +88,7 @@ export const InputStyled = styled.input(css `
 
             body:not(.pointer-events) &:focus {
                 & ~ ${SwitchStyled} {
-                    box-shadow: 0 0 0 2px ${checkboxColors.checkboxBorderFocus};
+                    box-shadow: 0 0 0 2px ${checkboxColors.transparent};
                 }
             }
 
@@ -104,12 +104,12 @@ export const InputStyled = styled.input(css `
 
                 &:hover ~ ${SwitchStyled} {
                     background-color: ${checkboxColors.switchOnHover};
-                    cursor: default;
+
                 }
 
                 &:active ~ ${SwitchStyled} {
                     background-color: ${checkboxColors.switchOnNormal};
-                    cursor: default;
+
                 }
 
                 &:disabled ~ ${SwitchStyled} {
@@ -166,9 +166,10 @@ export const InputStyled = styled.input(css `
 })
 
 export const CheckboxWrapperStyled = styled.label(() => css `
-    display: inline-flex;
+    display: flex;
+    align-items: center;
     position: relative;
-    cursor: auto;
+    cursor: pointer;
     user-select: none;
 
     body:not(.pointer-events) &:focus-within {

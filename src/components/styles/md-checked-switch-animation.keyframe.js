@@ -1,4 +1,4 @@
-import { keyframes } from '@emotion/react'
+import { keyframes } from '@emotion/react/macro'
 
 export const mdCheckedSwitchAnimation = keyframes`
     0% { transform: translateX(0px) }
