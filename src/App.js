@@ -26,9 +26,9 @@ const urlParams = [
     'downPayment',
     'durationMonth',
     'incomeStatement',
-    'programsChildren',
-    'programsFirstCar',
-    'tradeIn'
+    // 'programsChildren',
+    // 'programsFirstCar',
+    // 'tradeIn'
 ]
 
 const LabeledButton = withLabel(ButtonClassic)
@@ -40,7 +40,7 @@ const makeUrl = ({ state, partnerSource }) => {
                 (state[key] || state[key] === false) &&
                 `${key}=${state[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?downPaymentType=currency${urlParts.length >0 && '&'}${urlParts.join('&')}&source=dealer${partnerSource ? `jjj${partnerSource}` : ''}`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${partnerSource ? `jjj${partnerSource}` : ''}`
 }
 
 class App extends React.PureComponent {
@@ -146,7 +146,7 @@ class App extends React.PureComponent {
                 {this.state.showCalc && <NonPrintablePanelStyled>
                     <Headline1>Параметры</Headline1>
                     <Calculator {...calculatorProps} theme={lightTheme} />
-                    <ButtonClassic title="Показать QR-код" fullWidth onClick={this.handleShowQR} />
+                    <ButtonClassic title="Показать QR-код" fontWeight="semibold" fullWidth onClick={this.handleShowQR} />
                 </NonPrintablePanelStyled>}
                 {this.state.showQR && isEmpty(this.state.erros) && <PrintablePanelStyled>
                     <NonPrintableText>
@@ -160,9 +160,9 @@ class App extends React.PureComponent {
                         <QRCode {...qrProps} />
                     </QrStyled>
                     <NonPrintableText>
-                        <ButtonClassic title="Перейти в СберБанк Online" fullWidth as="a" href={urlSmartLink} target="_blank"/>
                         <LabeledButton title="Скопировать ссылку" fullWidth mode="secondary" onClick={this.handleCopyToClipboard} error={this.state?.copy} />
-                        <ButtonClassic title="Напечатать QR-код" fullWidth mode="secondary" onClick={this.handlePrint}/>
+                        <ButtonClassic title="Напечатать QR-код" mode="secondary" fullWidth onClick={this.handlePrint}/>
+                        <ButtonClassic title="Перейти в СберБанк Online" mode="secondary" fullWidth as="a" href={urlSmartLink} target="_blank"/>
                     </NonPrintableText>
                 </PrintablePanelStyled>}
                 
