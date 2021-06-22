@@ -59,7 +59,7 @@ export const modeStyles = ({ variant = 'h1', fontWeight = 'semibold', indent = '
         line-height: ${modeStyle.lineHeight};
         letter-spacing: ${letterSpacingHeadline};
         font-weight: ${fontWeightStyle[fontWeight] || fontWeightStyle.semibold};
-        font-family: SBSansDisplay, Arial, Helvetica, sans-serif;
+        /* font-family: SBSansDisplay, Arial, Helvetica, sans-serif; */
         margin: 0;
         padding: 0;
         /* padding-top: ${dynamicIndent(variant, indent)}; */

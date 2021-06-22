@@ -85,6 +85,8 @@ const dynamicTypographyHorizontalIndent = ({ iconReverse }) => {
 export const TypographyStyled = styled(Typography)(({ size }) => css`
     display: inline;
     border-bottom: 1px solid transparent;
+    display: inline-block;
+    vertical-align: top;
 
     ${HEADERS.includes(size) && css`
         font-family: SBSansDisplay, Arial, Helvetica, sans-serif;

@@ -1,9 +1,10 @@
 import React from 'react'
 import QRCode from 'qrcode.react'
-import { isEmpty, parseInt } from 'lodash'
+import { isEmpty, parseInt, sortBy } from 'lodash'
 import IMask from 'imask'
 import copy from 'copy-to-clipboard'
 import { withAxios } from 'react-axios'
+import { animateScroll } from 'react-scroll'
 
 import { ReactComponent as ArrowLeft } from './components/icon/common/ic-24-arrow-left.svg'
 import { Calculator } from './Calculator'
@@ -34,11 +35,16 @@ const urlParams = [
 const LabeledButton = withLabel(ButtonClassic)
 
 const makeUrl = ({ state, partnerSource }) => {
+    const passedState = {
+        ...state,
+        carPrice: String(parseInt(state.carPrice) + parseInt(state.additional)),
+        additional: false
+    }
     const urlParts = urlParams
             .map(
                 (key) =>
-                (state[key] || state[key] === false) &&
-                `${key}=${state[key]}`)
+                (passedState[key] || passedState[key] === false) &&
+                `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
     return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${partnerSource ? `jjj${partnerSource}` : ''}`
 }
@@ -50,6 +56,7 @@ class App extends React.PureComponent {
         model: '',
         carPrice: 1200000,
         downPayment: 400000,
+        additional: '',
         durationMonth: 36,
         incomeStatement: false,
         programsChildren: false,
@@ -63,7 +70,7 @@ class App extends React.PureComponent {
 
     componentWillMount() {
         this.props.axios('/car-list.json').then(result => {
-          this.setState({ carList: result.data })
+          this.setState({ carList: sortBy(result.data, ['title']) })
         })
       }
 
@@ -101,6 +108,7 @@ class App extends React.PureComponent {
             }
         }
         this.setState(stateSetProps)
+        animateScroll.scrollToTop({})
     }
 
     handleShowCalc = () => {
@@ -144,17 +152,17 @@ class App extends React.PureComponent {
         return (
             <WrapperStyled>
                 {this.state.showCalc && <NonPrintablePanelStyled>
-                    <Headline1>Параметры</Headline1>
+                    {/* <Headline1>Параметры</Headline1> */}
                     <Calculator {...calculatorProps} theme={lightTheme} />
                     <ButtonClassic title="Показать QR-код" fontWeight="semibold" fullWidth onClick={this.handleShowQR} />
                 </NonPrintablePanelStyled>}
                 {this.state.showQR && isEmpty(this.state.erros) && <PrintablePanelStyled>
                     <NonPrintableText>
-                        <IconWrapperStyled>
-                            <ArrowLeft />
-                        </IconWrapperStyled>
-                        
-                        <Link size="lg" colorScheme="primary" fontWeight="semibold" href="#" onClick={this.handleShowCalc} title="Изменить параметры" />
+                        <Link size="lg" colorScheme="primary" fontWeight="semibold" href="#" onClick={this.handleShowCalc} title="Изменить параметры" iconReverse="false">
+                            <IconWrapperStyled>
+                                <ArrowLeft />
+                            </IconWrapperStyled>
+                        </Link>
                     </NonPrintableText>
                     <QrStyled>
                         <QRCode {...qrProps} />

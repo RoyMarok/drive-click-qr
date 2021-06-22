@@ -5,8 +5,6 @@ import {
     LinkStyled,
     TypographyStyled,
     WrapperStyled,
-    IconStyled,
-    IconLoaderStyled,
     HEADERS
 } from './styles/link.style'
 
@@ -25,6 +23,7 @@ export const Link = ({
     underlined = true,
     disabled,
     onClick,
+    children,
     ...rest
 }) => (
     <LinkStyled
@@ -43,6 +42,7 @@ export const Link = ({
         <WrapperStyled
             iconReverse={iconReverse}
         >
+            {children}
             {title && <TypographyStyled
                 as={HEADERS.includes(size) ? size : 'span'}
                 verticalMargin="zero"

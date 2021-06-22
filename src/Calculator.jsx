@@ -4,7 +4,7 @@ import { map } from 'lodash'
 import { LabeledTextFieldMoney } from './components/TextFieldMoney'
 import { Switch } from './components/Switch'
 import { LabeledValueSelectClassic, ValueOption } from './components/value-select'
-import { BrandModel } from './components/BrandModel'
+import { BrandModel } from './components/brand-model'
 
 const duration = [
     {
@@ -107,6 +107,12 @@ export class Calculator extends React.Component {
             value
         })
     }
+    handleAdditional = (value) => {
+        this.changeParams({
+            title: 'additional',
+            value
+        })
+    }
 
     render() {
         const {
@@ -117,6 +123,7 @@ export class Calculator extends React.Component {
             downPayment,
             durationMonth,
             incomeStatement,
+            additional,
             // programsChildren,
             // programsFirstCar,
             // tradeIn,
@@ -146,7 +153,7 @@ export class Calculator extends React.Component {
                     value={passedValue}
                     onChange={this.handleIsNewCar}
                     error={errors?.['isNewCar']}
-                    label={'Новый / Подержаный'}
+                    label={'Новый / Подержанный'}
                 >
                     <ValueOption
                         value={'new'}
@@ -154,7 +161,7 @@ export class Calculator extends React.Component {
                     />
                     <ValueOption
                         value={'old'}
-                        title="Подержаный автомобиль"
+                        title="Подержанный автомобиль"
                     />
                 </LabeledValueSelectClassic>
                 <BrandModel
@@ -202,14 +209,14 @@ export class Calculator extends React.Component {
                         ))
                     }
                 </LabeledValueSelectClassic>
-                <Switch
+                {/* <Switch
                     name="incomeStatement"
                     mode="switch"
                     value={incomeStatement}
                     onChange={this.handleIncomeStatement}
                 >
                     {'Есть справка о доходах'}
-                </Switch>
+                </Switch> */}
                 {/* <Switch
                     name="programsChildren"
                     mode="switch"
@@ -234,6 +241,17 @@ export class Calculator extends React.Component {
                 >
                     {'Trade-In'}
                 </Switch> */}
+                <LabeledTextFieldMoney
+                    placeholder=""
+                    label={'Дополнительное оборудование'}
+                    value={`${additional}`}
+                    error={errors?.['additional']}
+                    a11y={{ label: "Дополнительное оборудование" }}
+                    onChange={this.handleAdditional}
+                    size='md'
+                    currency={{ title: "RUB" }}
+                    maskOptions={{ scale: '0', radix: ' ' }}
+                />
             </React.Fragment>
         )
     }
