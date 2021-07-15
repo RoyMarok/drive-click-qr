@@ -28,18 +28,18 @@ export const IconWrapperStyled = styled.div`
 export const PanelStyled = styled.div(() => css`
     width: 608px;
     padding: 32px;
-    margin-left: 32px;
-    margin-bottom: 32px;
+    margin: 0;
     text-align: left;
     border-radius: ${lgBorderRadius};
     box-shadow: ${lgShadow(theme)};
     position: relative;
 
-    /* ${mediaMd} {
+    ${mediaMd} {
         margin: 0;
         width: 100%;
+        padding: 16 px;
         box-shadow: none;
-    } */
+    }
 
     ${mediaSm} {
         margin: 0;

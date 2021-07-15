@@ -37,7 +37,7 @@ const LabeledButton = withLabel(ButtonClassic)
 const makeUrl = ({ state, partnerSource }) => {
     const passedState = {
         ...state,
-        carPrice: String(parseInt(state.carPrice) + parseInt(state.additional)),
+        carPrice: String(parseInt(state.carPrice) + parseInt(state.additional || 0)),
         additional: false
     }
     const urlParts = urlParams
