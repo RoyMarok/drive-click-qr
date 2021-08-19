@@ -30,6 +30,10 @@ const duration = [
 ]
 
 export class Calculator extends React.Component {
+    state = {
+        showAdd: true
+    }
+
     changeParams = ({ title, value }) => {
         const { onChange } = this.props
         const changeObj = {}
@@ -112,6 +116,17 @@ export class Calculator extends React.Component {
             title: 'additional',
             value
         })
+    }
+    handleShowAdd = (value) => {
+        this.setState({
+            showAdd: !this.state.showAdd
+        })
+        if (value) {
+            this.changeParams({
+                title: 'additional',
+                value: this.props.carPrice * 0.2
+            })
+        }
     }
 
     render() {
@@ -241,7 +256,15 @@ export class Calculator extends React.Component {
                 >
                     {'Trade-In'}
                 </Switch> */}
-                <LabeledTextFieldMoney
+                <Switch
+                    name="tradeIn"
+                    mode="switch"
+                    value={!this.state.showAdd}
+                    onChange={this.handleShowAdd}
+                >
+                    {'+20%'}
+                </Switch>
+                {this.state.showAdd && <LabeledTextFieldMoney
                     placeholder=""
                     label={'Дополнительное оборудование'}
                     value={`${additional}`}
@@ -251,7 +274,7 @@ export class Calculator extends React.Component {
                     size='md'
                     currency={{ title: "RUB" }}
                     maskOptions={{ scale: '0', radix: ' ' }}
-                />
+                />}
             </React.Fragment>
         )
     }
