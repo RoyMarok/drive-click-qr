@@ -8,7 +8,7 @@ import { BrandModel } from './components/brand-model'
 
 export class Calculator extends React.Component {
     state = {
-        showAdd: false
+        showAdd: true
     }
 
     changeParams = ({ title, value }) => {

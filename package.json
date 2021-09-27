@@ -1,7 +1,7 @@
 {
   "name": "react-qr",
   "version": "0.1.0",
-  "homepage": "/qr_20",
+  "homepage": "/qr",
   "private": true,
   "dependencies": {
     "@emotion/babel-plugin": "11.3.0",
