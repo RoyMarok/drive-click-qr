@@ -64,6 +64,7 @@ class App extends React.PureComponent {
         tradeIn: false,
         errors: {},
         carList: [],
+        duration: [],
         showQR: false,
         showCalc: true
     }
@@ -71,6 +72,9 @@ class App extends React.PureComponent {
     componentWillMount() {
         this.props.axios('/car-list.json').then(result => {
           this.setState({ carList: sortBy(result.data, ['title']) })
+        })
+        this.props.axios('/duration.json').then(result => {
+          this.setState({ duration: result.data })
         })
       }
 

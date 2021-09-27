@@ -6,32 +6,9 @@ import { Switch } from './components/Switch'
 import { LabeledValueSelectClassic, ValueOption } from './components/value-select'
 import { BrandModel } from './components/brand-model'
 
-const duration = [
-    {
-        title: '1 год',
-        value: '12'
-    },
-    {
-        title: '2 года',
-        value: '24'
-    },
-    {
-        title: '3 года',
-        value: '36'
-    },
-    {
-        title: '4 года',
-        value: '48'
-    },
-    {
-        title: '5 лет',
-        value: '60'
-    }
-]
-
 export class Calculator extends React.Component {
     state = {
-        showAdd: true
+        showAdd: false
     }
 
     changeParams = ({ title, value }) => {
@@ -137,8 +114,9 @@ export class Calculator extends React.Component {
             carPrice,
             downPayment,
             durationMonth,
-            incomeStatement,
+            // incomeStatement,
             additional,
+            duration,
             // programsChildren,
             // programsFirstCar,
             // tradeIn,
