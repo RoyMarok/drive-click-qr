@@ -35,6 +35,12 @@ export class Calculator extends React.Component {
             title: 'carPrice',
             value
         })
+        if (!this.state.showAdd) {
+            this.changeParams({
+                title: 'additional',
+                value: value * 0.2
+            })
+        }
     }
 
     handleDownPayment = (value) => {

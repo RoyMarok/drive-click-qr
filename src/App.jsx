@@ -13,7 +13,6 @@ import * as lightTheme from './components/styles/light.theme.style'
 import { makeMoneyMask } from './components/utils'
 import { ButtonClassic } from './components/button'
 import { withLabel } from './components/labeled'
-import { Headline1 } from './components/headline'
 import { Link } from './components/link'
 
 const INITIAL_LOW = 0.2
@@ -40,13 +39,15 @@ const makeUrl = ({ state, partnerSource }) => {
         carPrice: String(parseInt(state.carPrice) + parseInt(state.additional || 0)),
         additional: false
     }
+    const passedParnterSource = partnerSource.replace(/\D/ig, '')
+    console.log('makeUrl', partnerSource, passedParnterSource)
     const urlParts = urlParams
             .map(
                 (key) =>
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${partnerSource ? `jjj${partnerSource}` : ''}`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
 }
 
 class App extends React.PureComponent {
@@ -156,7 +157,6 @@ class App extends React.PureComponent {
         return (
             <WrapperStyled>
                 {this.state.showCalc && <NonPrintablePanelStyled>
-                    {/* <Headline1>Параметры</Headline1> */}
                     <Calculator {...calculatorProps} theme={lightTheme} />
                     <ButtonClassic title="Показать QR-код" fontWeight="semibold" fullWidth onClick={this.handleShowQR} />
                 </NonPrintablePanelStyled>}
