@@ -7,10 +7,6 @@ import { LabeledValueSelectClassic, ValueOption } from './components/value-selec
 import { BrandModel } from './components/brand-model'
 
 export class Calculator extends React.Component {
-    state = {
-        showAdd: true
-    }
-
     changeParams = ({ title, value }) => {
         const { onChange } = this.props
         const changeObj = {}
@@ -35,12 +31,6 @@ export class Calculator extends React.Component {
             title: 'carPrice',
             value
         })
-        if (!this.state.showAdd) {
-            this.changeParams({
-                title: 'additional',
-                value: value * 0.2
-            })
-        }
     }
 
     handleDownPayment = (value) => {
@@ -101,15 +91,10 @@ export class Calculator extends React.Component {
         })
     }
     handleShowAdd = (value) => {
-        this.setState({
-            showAdd: !this.state.showAdd
+        this.changeParams({
+            title: 'add20',
+            value
         })
-        if (value) {
-            this.changeParams({
-                title: 'additional',
-                value: this.props.carPrice * 0.2
-            })
-        }
     }
 
     render() {
@@ -123,6 +108,7 @@ export class Calculator extends React.Component {
             // incomeStatement,
             additional,
             duration,
+            add20,
             // programsChildren,
             // programsFirstCar,
             // tradeIn,
@@ -208,6 +194,28 @@ export class Calculator extends React.Component {
                         ))
                     }
                 </LabeledValueSelectClassic>
+               
+                <Switch
+                    name="tradeIn"
+                    mode="switch"
+                    value={add20}
+                    onChange={this.handleShowAdd}
+                >
+                    {'+20%'}
+                </Switch>
+                {!add20 && <LabeledTextFieldMoney
+                    placeholder=""
+                    label={'Дополнительное оборудование'}
+                    value={`${additional}`}
+                    error={errors?.['additional']}
+                    a11y={{ label: "Дополнительное оборудование" }}
+                    onChange={this.handleAdditional}
+                    size='md'
+                    currency={{ title: "RUB" }}
+                    maskOptions={{ scale: '0', radix: ' ' }}
+                />}
+
+
                 {/* <Switch
                     name="incomeStatement"
                     mode="switch"
@@ -240,25 +248,6 @@ export class Calculator extends React.Component {
                 >
                     {'Trade-In'}
                 </Switch> */}
-                <Switch
-                    name="tradeIn"
-                    mode="switch"
-                    value={!this.state.showAdd}
-                    onChange={this.handleShowAdd}
-                >
-                    {'+20%'}
-                </Switch>
-                {this.state.showAdd && <LabeledTextFieldMoney
-                    placeholder=""
-                    label={'Дополнительное оборудование'}
-                    value={`${additional}`}
-                    error={errors?.['additional']}
-                    a11y={{ label: "Дополнительное оборудование" }}
-                    onChange={this.handleAdditional}
-                    size='md'
-                    currency={{ title: "RUB" }}
-                    maskOptions={{ scale: '0', radix: ' ' }}
-                />}
             </React.Fragment>
         )
     }

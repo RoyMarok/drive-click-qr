@@ -31,12 +31,36 @@ const urlParams = [
     // 'tradeIn'
 ]
 
+const durationDefaultList = [{
+    "title": "1 год",
+    "value": "12"
+}, {
+    "title": "2 года",
+    "value": "24"
+}, {
+    "title": "3 года",
+    "value": "36"
+}, {
+    "title": "4 года",
+    "value": "48"
+}, {
+    "title": "5 лет",
+    "value": "60"
+}, {
+    "title": "6 лет",
+    "value": "72"
+}, {
+    "title": "7 лет",
+    "value": "84"
+}]
+
 const LabeledButton = withLabel(ButtonClassic)
 
 const makeUrl = ({ state, partnerSource }) => {
+    const passedCarPrice = parseInt(state.carPrice)
     const passedState = {
         ...state,
-        carPrice: String(parseInt(state.carPrice) + parseInt(state.additional || 0)),
+        carPrice: String(passedCarPrice + (state.add20 ? passedCarPrice*.2 : parseInt(state.additional || 0))),
         additional: false
     }
     const passedParnterSource = partnerSource.replace(/\D/ig, '')
@@ -58,6 +82,7 @@ class App extends React.PureComponent {
         carPrice: 1200000,
         downPayment: 400000,
         additional: '',
+        add20: true,
         durationMonth: 36,
         incomeStatement: false,
         programsChildren: false,
@@ -65,7 +90,7 @@ class App extends React.PureComponent {
         tradeIn: false,
         errors: {},
         carList: [],
-        duration: [],
+        duration: durationDefaultList,
         showQR: false,
         showCalc: true
     }
