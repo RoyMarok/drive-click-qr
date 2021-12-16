@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import { noop } from 'lodash'
 
 import {
     disableHandler,
@@ -52,7 +52,7 @@ export class BaseSlider extends React.PureComponent {
         colorScheme: 'base',
         mode: void 0,
 
-        onChange: _.noop,
+        onChange: noop,
         disabled: false,
 
         error: void 0,

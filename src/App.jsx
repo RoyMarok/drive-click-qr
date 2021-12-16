@@ -61,21 +61,20 @@ const getMonthlyPayment = ({ percent, creditSum, term }) => {
 
 const LabeledText = withLabel(TextStyled)
 
-const makeUrl = ({ state, partnerSource }) => {
+const makeUrl = ({ state }) => {
     const passedCarPrice = parseInt(state.carPrice, DEX_RADIX)
     const passedState = {
         ...state,
         carPrice: String(passedCarPrice + (state.add20 ? passedCarPrice * .2 : parseInt(state.additional || 0, DEX_RADIX))),
         additional: false
     }
-    const passedParnterSource = partnerSource.replace(/\D/ig, '')
     const urlParts = urlParams
             .map(
                 (key) =>
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=drom${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=drom`
 }
 
 class App extends React.PureComponent {
@@ -102,13 +101,13 @@ class App extends React.PureComponent {
     }
 
     componentWillMount() {
-
         this.props.axios('config.json').then(result => {
             this.setState({...result.data})
         })
 
-        const { location } = this.props
-        const search = makeSearchObj(location?.search)
+        const search = makeSearchObj(document.URL.split('?').pop())
+
+        console.log('componentWillMount', document.URL.split('?').pop(), search)
         const passedCreditAmount = Math.min(MAX_CREDIT_AMOUNT, search?.desired_credit_amount)
         const desiredCarAmount = parseInt(search?.desired_credit_amount, DEX_RADIX) + parseInt(search?.down_payment, DEX_RADIX)
         const pasedDownPayment = desiredCarAmount - passedCreditAmount
@@ -154,15 +153,13 @@ class App extends React.PureComponent {
 
 
     render () {
-        const { location } = this.props
-        const partnerSource = location?.pathname?.substring(1)
         const monthlyPayment = getMonthlyPayment({
             percent,
             creditSum: this.state.creditAmount,
             term: this.state.durationMonth
         })
         
-        const urlSmartLink = makeUrl({ state: this.state, partnerSource })
+        const urlSmartLink = makeUrl({ state: this.state })
         const qrProps = {
             value: urlSmartLink,
             renderAs: 'svg',

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import { mapKeys, camelCase, noop, dropRight, last, isFunction, has, get } from 'lodash'
 
 import { Icon } from './icon'
 
@@ -20,12 +20,12 @@ export class IconLoader extends React.PureComponent {
                 .then(({ default: defaultExport = {}, ...namedExport } = {}) => {
                     const icons = { ...namedExport, ...defaultExport }
 
-                    IconLoader.namespaces[namespace] = _.mapKeys(icons, (value, key) => _.camelCase(key))
+                    IconLoader.namespaces[namespace] = mapKeys(icons, (value, key) => camelCase(key))
 
                     return icons
                 })
         } else {
-            IconLoader.namespaces[namespace] = _.mapKeys(promise, (value, key) => _.camelCase(key))
+            IconLoader.namespaces[namespace] = mapKeys(promise, (value, key) => camelCase(key))
         }
     }
 
@@ -37,8 +37,8 @@ export class IconLoader extends React.PureComponent {
 
     static defaultProps = {
         size: void 0,
-        onError: _.noop,
-        onClick: _.noop
+        onError: noop,
+        onClick: noop
     }
 
 
@@ -54,8 +54,8 @@ export class IconLoader extends React.PureComponent {
         this.unmount = true
     }
 
-    getName = (fullPath) => _.camelCase(_.last(fullPath.split(SLASH)))
-    getNamespace = (fullPath) => _.dropRight(fullPath.split(SLASH)).join(SLASH)
+    getName = (fullPath) => camelCase(last(fullPath.split(SLASH)))
+    getNamespace = (fullPath) => dropRight(fullPath.split(SLASH)).join(SLASH)
 
     static namespaces = {}
 
@@ -63,7 +63,7 @@ export class IconLoader extends React.PureComponent {
         const namespace = this.getNamespace(props.name)
         const { onError } = this.props
 
-        if (namespace && _.isFunction(IconLoader.namespaces[namespace])) {
+        if (namespace && isFunction(IconLoader.namespaces[namespace])) {
             IconLoader.namespaces[namespace]()
                 .then(() => {
                     if (!this.unmount) {
@@ -82,14 +82,14 @@ export class IconLoader extends React.PureComponent {
         const namespace = this.getNamespace(fullPath)
         const name = this.getName(fullPath)
 
-        if (!_.has(IconLoader.namespaces, [namespace, name])) {
+        if (!has(IconLoader.namespaces, [namespace, name])) {
             if (this.iconsLoaded) {
                 onError()
             }
 
             return null
         }
-        const icon = _.get(IconLoader.namespaces, [namespace, name])
+        const icon = get(IconLoader.namespaces, [namespace, name])
 
         return (
             <Icon

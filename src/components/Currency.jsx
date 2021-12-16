@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import { omit } from 'lodash'
 
 import { CurrencyStyled } from './styles/common.config.style'
 
@@ -21,8 +21,7 @@ const options = {
     display: {}
 }
 
-const hasFallback = (code) => _.has(options.display, _.lowerCase(code))
-const hasSymbol = (code) => _.has(options.symbols, _.lowerCase(code))
+const hasSymbol = (code) => Boolean(options.symbols[String(code).toLowerCase()])
 
 const isSymbol = (code, mode) => {
     switch (mode) {
@@ -32,7 +31,7 @@ const isSymbol = (code, mode) => {
         case 'symbol':
             return hasSymbol(code)
         default:
-            return !hasFallback(code) && hasSymbol(code)
+            return hasSymbol(code)
     }
 }
 
@@ -40,7 +39,7 @@ const getCurrencyValue = (code, mode = 'auto', value = 0) => {
     if (mode === 'code') {
         return code
     } else if ((mode === 'symbol' || mode === 'auto') && hasSymbol(code)) {
-        return options.symbols[_.lowerCase(code)]
+        return options.symbols[String(code).toLowerCase()]
     }
 
     return code
@@ -56,7 +55,7 @@ export const Currency = ({
     fontWeight = 'regular',
     ...props
 }) => {
-    const passedProps = _.omit({ value, title, mode, size, ...props }, [
+    const passedProps = omit({ value, title, mode, size, ...props }, [
         'value',
         'currencyCode',
         'asSymbol',

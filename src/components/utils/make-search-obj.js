@@ -4,7 +4,7 @@ export const makeSearchObj = (string) => {
     const out = {}
     const passedString = String(decodeURIComponent(string).replace(uriSpace, '__').replace(quots, ''))
 
-    passedString.substring(1).split('&').forEach((item) => {
+    passedString.split('&').forEach((item) => {
         const parts = String(item).split('=')
         if (parts[1]) {
             out[parts[0]] = parts[1] || ''
