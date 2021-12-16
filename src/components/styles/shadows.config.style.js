@@ -20,6 +20,7 @@ const SHADOWS = {
 const makeShadow = (color, size = 'common') => `${SHADOWS[size]} ${color}`
 const getShadow = (theme, size) => `${makeShadow(theme.firstShadow)}, ${makeShadow(theme.secondShadow, size)}`
 
+export const commonShadow = (theme) => getShadow(theme, SIZES.common)
 export const xxsShadow = (theme) => getShadow(theme, SIZES.xxs)
 export const xsShadow = (theme) => getShadow(theme, SIZES.xs)
 export const smShadow = (theme) => getShadow(theme, SIZES.sm)

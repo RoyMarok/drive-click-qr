@@ -413,3 +413,303 @@ export const stagesTitle = primary
 export const navigationFill = colors.gray3
 export const navigationHover = primary
 export const navigationActive = primary
+
+
+export const brandQuaternary = colors.green75
+export const successQuaternary = colors.green75
+export const infoQuaternary = colors.violet75
+export const warningQuaternary = colors.orange75
+
+
+export const focusColor = primary
+
+export const backgroundZero = white
+export const backgroundOne = '#F5F5F5'
+export const backgroundOneNeutral = '#F5F5F5'
+export const backgroundOneSuccess = '#EFFCF0'
+export const backgroundOneInfo = '#F8F6FB'
+export const backgroundOneWarning = '#FCF3EF'
+
+/* SberPrivateBanking */
+export const sberPrivateBanking1150 = '#333F48'
+export const sberPrivateBanking900 = '#566A7A'
+export const sberPrivateBanking450 = '#A8B6C1'
+export const sberPrivateBanking200 = '#D9E0E4'
+
+export const sberPrivateBanking950 = '#A1A41D'
+export const sberPrivateBanking600 = '#DEE157'
+
+/* SberPervyi  */
+export const sberPervyi750 = '#840F57'
+export const sberPervyi700 = '#A2125E'
+export const sberPervyi650 = '#C40F64'
+export const sberPervyi600 = '#E30066'
+
+/* Компонентные семантические цвета */
+
+/* Divider */
+export const dividerThin = additional8
+export const dividerFat = additional4
+
+/* Elevation Wrapper */
+
+/* Elevation Zero */
+export const elevationZeroBody = noColor
+export const elevationZeroBorderNormal = additional24
+export const elevationZeroBorderHover = additional40
+export const elevationZeroBorderClick = additional60
+export const elevationZeroBorderActiveNormal = brandSecondary
+export const elevationZeroBorderActiveHover = brandTertiary
+export const elevationZeroBorderActiveClick = brandQuaternary
+
+/* Elevation One */
+export const elevationOneBody = noColor
+export const elevationOneBorderNormal = additional8
+export const elevationOneBorderHover = additional16
+export const elevationOneBorderClick = additional40
+export const elevationOneBorderActiveNormal = brandSecondary
+export const elevationOneBorderActiveHover = brandTertiary
+export const elevationOneBorderActiveClick = brandQuaternary
+
+/* Checkbox */
+export const checkboxOnDisabled = successPrimary
+
+export const checkboxOffBody = noColor
+export const checkboxOffBodyDisabled = additional16
+
+export const checkboxOffNormal = additional24
+export const checkboxOffDisabled = additional24
+
+export const checkboxTextWarning = warningSecondary
+
+export const checkboxOffToggleDisabled = whiteSecondary
+export const checkboxOnToggleDisabled = '#B8DDBF'
+
+export const checkboxOffTextNormal = primary
+export const checkboxOffTextHover = secondary
+export const checkboxOffTextClick = primary
+
+export const checkboxOnText = primary
+export const checkboxTextDisabled = tertiary
+
+export const checkboxTextWarningNormal = warningSecondary
+export const checkboxTextWarningHover = warningTertiary
+export const checkboxTextWarningClick = warningQuaternary
+
+/* Field */
+export const fieldBody = noColor
+export const fieldBodyDisabled = additional4
+
+export const fieldBorderNormal = additional24
+export const fieldBorderHover = additional40
+export const fieldBorderClick = additional60
+export const fieldBorderDisabled = additional16
+export const fieldBorderReadOnly = additional24
+
+export const fieldWarning = warningSecondary
+
+export const fieldBorderWarningNormal = warningSecondary
+export const fieldBorderWarningHover = warningTertiary
+export const fieldBorderWarningClick = warningQuaternary
+
+export const fieldLabel = primary
+export const fieldLabelFilled = tertiary
+
+export const fieldLabelIconNormal = tertiary
+export const fieldLabelIconHover = primary
+
+export const fieldDescription = secondary
+
+export const fieldPlaceholder = tertiary
+
+export const fieldValue = primary
+export const fieldValueDisabled = tertiary
+
+export const fieldAdditional = secondary
+
+export const fieldToggleBody = whitePrimary
+export const fieldToggleBodyDisabled = colors.gray0
+
+export const fieldToggleBorderNormal = brandPrimary
+export const fieldToggleBorderHover = brandSecondary
+export const fieldToggleBorderClick = brandTertiary
+export const fieldToggleBorderDisabled = colors.gray1
+
+export const fieldToggleBorderWarningNormal = warningSecondary
+export const fieldToggleBorderWarningHover = warningTertiary
+export const fieldToggleBorderWarningClick = warningQuaternary
+
+/* Button */
+
+/* Button Solid */
+export const buttonSolidBodyNormal = brandPrimary
+export const buttonSolidBodyHover = additional24
+export const buttonSolidBodyClick = additional40
+
+export const buttonSolidText = whitePrimary
+
+/* Button Stroke */
+export const buttonStrokeBody = transparent
+export const buttonStrokeBorderNormal = additional24
+export const buttonStrokeBorderHover = additional40
+export const buttonStrokeBorderClick = additional60
+
+export const buttonStrokeText = primary
+
+/* Button Transparent*/
+export const buttonTransparentBodyNormal = transparent
+export const buttonTransparentBodyHover = additional4
+export const buttonTransparentBodyClick = additional8
+export const buttonTransparentBodyDisabled = additional8
+
+export const buttonTransparentText = primary
+export const buttonTransparentTextDisabled = additional24
+
+/* Button Dashed */
+export const buttonDashedNormal = primary
+export const buttonDashedHover = secondary
+export const buttonDashedClick = primary
+
+/* Button Elevation */
+export const buttonElevationText = primary
+export const buttonElevationBody = elevationOneBody
+export const buttonElevationBoderNormal = elevationOneBorderNormal
+export const buttonElevationBoderHover = elevationOneBorderHover
+export const buttonElevationBoderClick = elevationOneBorderClick
+
+/* Link*/
+
+
+/* SegmentedRadio */
+export const segmentedRadioOffBodyNormal = noColor
+export const segmentedRadioOffBodyHover = additional8
+export const segmentedRadioOffBodyClick = additional16
+export const segmentedRadioOffBodyDisabled = additional8
+
+export const segmentedRadioOffText = primary
+export const segmentedRadioOffTextDisabled = additional24
+
+export const segmentedRadioOnBody = brandPrimary
+export const segmentedRadioOnText = whitePrimary
+
+export const segmentedRadioGroupBorder = dividerThin
+
+/* Dropdown */
+export const dropdownBody = elevationOneBody
+export const dropdownBorder = dividerThin
+export const dropdownText = primary
+
+export const dropdownItemNormal = noColor
+export const dropdownItemHover = additional8
+export const dropdownItemClick = additional16
+
+export const dropdownItemSelectedNormal = brandTransparent16
+export const dropdownItemSelectedHover = brandTransparent16
+export const dropdownItemSelectedClick = brandTransparent24
+
+/* Tags */
+export const tagTextDisabled = tertiary
+
+export const tagIconNormal = additional24
+export const tagIconHover = additional60
+export const tagIconClick = primary
+
+/* Accordion */
+export const accordionTextClick = primary
+
+export const accordionBody = transparent
+export const accordionDescription = secondary
+export const accordionBorder = additional4
+
+/* Table*/
+export const tableBody = noColor
+export const tableBorder = dividerThin
+
+/* Alert */
+
+/* Card */
+export const cardButtonBodyNormal = additional4
+export const cardButtonBodyHover = additional8
+export const cardButtonBodyClick = additional16
+
+export const cardButtonIconNormal = additional24
+export const cardButtonIconHover = primary
+
+export const cardButtonIconBrand = brandSecondary
+
+export const cardIconSolid = whitePrimary
+export const cardIconTransparent = colors.gray8
+
+export const cardIconTransparentBody = brandTransparent16
+export const cardIconSolidBody = brandPrimary
+
+export const cardAdditionalButtonBody = brandTransparent16
+export const cardAdditionalButtonIcon = brandPrimary
+
+export const cardDescription = tertiary
+
+/* Banner */
+export const bannerSuccess = successTransparent8
+export const bannerWarning = warningTransparent8
+export const bannerInfo = infoTransparent8
+export const bannerDraft = additional8
+
+export const bannerNavigationButtonNormal = colors.gray1
+export const bannerNavigationButtonHover = primary
+export const bannerNavigationButtonClick = primary
+
+/* Tooltip */
+export const tooltipBorder = dividerThin
+
+
+/* HorizontalScroll */
+export const horizontalScrollGradientFrom = noColor
+export const horizontalScrollGradientTo = transparent
+
+/* Tabs */
+export const tabsStickyBody = noColor
+export const tabsBorder = additional8
+
+export const tabBody = transparent
+
+export const tabIndicatorNormal = transparent
+export const tabIndicatorHover = additional16
+
+export const tabSelectedText = primary
+export const tabSelectedIndicator = brandPrimary
+
+
+/* LoaderIcon */
+export const loaderIconBorder = additional8
+export const loaderIconLoader = additional100
+
+/* Calendar */
+export const calendarBody = dropdownBody
+export const calendarTextWeekend = brandSecondary
+export const calendarButtonNormal = buttonTransparentBodyNormal
+
+export const calendarButtonWarning = warningTransparent16
+export const calendarButtonRange = brandTransparent16
+
+export const calendarSubmitButton = buttonSolidBodyNormal
+export const calendarSubmitButtonDisabled = additional8
+
+/* Stages */
+export const stagesBorder = additional24
+export const stagesBody = noColor
+export const stagesText = tertiary
+
+export const stagesSuccessBody = successPrimary
+export const stagesSuccessText = white
+
+export const stagesTagText = primary
+
+/* Icon Products colors */
+export const iconProductGoals = colors.teal5
+export const iconProductCredit = colors.blue5
+export const iconProductDeposit = colors.aqua5
+export const iconProductCard = colors.green5
+
+/* Icon */
+export const iconDraft = additional24
+

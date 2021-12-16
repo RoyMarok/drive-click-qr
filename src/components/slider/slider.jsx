@@ -5,7 +5,7 @@ import { ValueSelect, ValueOption } from '../value-select'
 import { TextFieldMasked } from '../TextFieldMasked'
 import { omittere } from '../utils/hoc/omittere'
 import { withLabel } from '../labeled'
-import { makeFieldMoneyMask } from '../money/make-field-money-mask'
+import { makeFieldMoneyMask } from '../utils/make-field-money-mask'
 
 import { BaseSlider } from './base-slider'
 import { SliderStyled } from './slider.style'
@@ -31,7 +31,7 @@ const formOmitProps = [
 
 export const Slider = omittere(formOmitProps)(
     ({
-        value,
+        value='',
         onChange = () => {},
         onFocus = () => {},
         onBlur = () => {},

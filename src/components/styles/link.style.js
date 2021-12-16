@@ -1,6 +1,7 @@
 import styled from '@emotion/styled/macro'
 import { css } from '@emotion/react/macro'
 
+import * as theme from './light.theme.style'
 import { Typography, baseX } from './common.config.style.js'
 import { marginStyle } from './margin-wrapper.style'
 import { IconLoaderViewBox, IconViewBox } from '../icon/icon-view'
@@ -110,14 +111,17 @@ export const IconStyled = styled(IconViewBox)(({ size, hasTitle, iconReverse }) 
 
 export const IconLoaderStyled = IconStyled.withComponent(IconLoaderViewBox)
 
-export const LinkStyled = styled.a(({ theme, colorScheme, underlined, disabled }) => {
+export const LinkStyled = styled.a(({ colorScheme, underlined, disabled }) => {
     const linkTheme = themeByColorScheme(theme, colorScheme)
     return css`
         max-width: 100%;
         padding: 0;
         cursor: pointer;
-        text-decoration: ${underlined ? 'underline' : 'none'};
-        text-decoration-color: ${linkTheme.linkNormal};
+        /* text-decoration: ${underlined ? 'underline' : 'none'};
+        text-decoration-color: ${linkTheme.linkNormal}; */
+        border-bottom-width: 1px;
+        border-bottom-style: ${underlined ? 'dashed' : 'none'};
+        border-bottom-color: ${linkTheme.linkNormal};
         color: inherit;
         outline: none;
         display: inline-block;
@@ -160,6 +164,7 @@ export const LinkStyled = styled.a(({ theme, colorScheme, underlined, disabled }
 
         &:hover {
             text-decoration-color: ${linkTheme.linkHover};
+            border-bottom-color: ${theme.transparent};
 
             ${TypographyStyled} {
                 color: ${linkTheme.linkHover};

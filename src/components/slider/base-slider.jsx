@@ -8,7 +8,7 @@ import {
     handlePreventDefault,
     addClickHandlers,
     removeClickHandlers
-} from '../../utils/handlers'
+} from '../utils/handlers'
 
 import { Segments } from './segments'
 import {
@@ -87,7 +87,7 @@ export class BaseSlider extends React.PureComponent {
         const newValue = getValueByMouse(
             event,
             this.track,
-            pageXOffset,
+            0,
             computeStepByDigits(min, max, step, digits),
             min,
             max,

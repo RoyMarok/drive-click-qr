@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import BigNumber from 'bignumber.js'
 
-import { handlePreventDefault } from '../../utils/handlers'
+import { handlePreventDefault } from '../utils/handlers'
 
 const HALF = 2
 const EXPONENT_FLOOR = 10

@@ -1,1 +1,0 @@
-export { BrandModel } from './BrandModel'

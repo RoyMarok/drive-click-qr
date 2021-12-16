@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formatNumber, makeMoneyMask } from '../../utils'
+import { formatNumber, makeMoneyMask } from '../utils'
 
 import { BoundariesStyled } from './slider.style'
 import { getBoundaries, getValuePrefixSuffix } from './utils'

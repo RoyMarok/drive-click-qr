@@ -69,3 +69,5 @@ export const modeStyles = ({ variant = 'h1', fontWeight = 'semibold', indent = '
 
 export const HeadlineStyled = styled.h1(modeStyles, ({ theme }) => dynamicColor(theme.primary))
 
+export const TextStyled = styled.div(modeStyles, ({ theme }) => dynamicColor(theme.primary))
+

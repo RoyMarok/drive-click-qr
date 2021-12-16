@@ -33,3 +33,27 @@ export const lineHeightBody2 = `${baseX * 6}px`
 
 export const fontSizeSm = '13px'
 export const lineHeightSm = `${baseX * 4}px`
+
+export const getFontSize = (size) => {
+    switch (size) {
+        case 'lg':
+            return fontSizeLg
+        case 'sm':
+            return fontSizeSm
+        case 'md':
+        default:
+            return fontSizeMd
+    }
+}
+
+export const getLineHeight = (size) => {
+    switch (size) {
+        case 'lg':
+            return lineHeightLg
+        case 'sm':
+            return lineHeightMd
+        case 'md':
+        default:
+            return lineHeightSm
+    }
+}

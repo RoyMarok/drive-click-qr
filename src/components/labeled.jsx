@@ -7,7 +7,8 @@ import { getDisplayName } from './utils'
 import {
     HeadlineStyled,
     ErrorStyled,
-    LabelStyled
+    LabelStyled,
+    DescriptionStyled
 } from './styles/common.config.style'
 
 const mapTypographySize = {
@@ -42,7 +43,7 @@ export const Labeled = ({
                 <HeadlineStyled size={mapTypographySize[size]}>
                     <label>
                         <LabelStyled
-                            size={mapTypographySize[size]}
+                            size={mapTypographySize['sm']}
                             verticalMargin="micro"
                             colorScheme="primary"
                             aria-label={label}
@@ -64,6 +65,17 @@ export const Labeled = ({
         >
             {error}
         </ErrorStyled>}
+        {description && (
+            <DescriptionStyled
+                size={mapTypographySize['sm']}
+                colorScheme="secondary"
+                verticalMargin="micro"
+                content={description}
+            >
+                {description}
+            </DescriptionStyled>
+
+        )}
     </MarginWrapper>
 )
 

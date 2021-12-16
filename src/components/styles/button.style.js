@@ -1,7 +1,7 @@
 import styled from '@emotion/styled/macro'
 import { css } from '@emotion/react/macro'
 
-import { xsBorderRadius } from './radius.config.style'
+import { getBorderRadius } from './radius.config.style'
 import { Typography } from './common.config.style.js'
 import { IconLoaderViewBox, IconViewBox } from '../icon/icon-view'
 import { ContainedLoader } from '../loader'
@@ -71,7 +71,7 @@ const fullWidthStyle = ({ fullWidth }) => fullWidth && css`
 export const ButtonBaseStyled = styled.button(({ size, icon, iconReverse, isLoading }) => css`
     position: relative;
     cursor: pointer;
-    border-radius: ${xsBorderRadius};
+    border-radius: ${getBorderRadius(size)};
     text-decoration: none;
     transition:
           border-color 0.17s,
@@ -133,7 +133,7 @@ export const GreenButton = styled(ButtonBaseStyled)`
     &:active {
         background-color: ${theme.buttonPrimaryNormal};
         ${ButtonContainerStyled}:after {
-            background-color: ${theme.buttonPrimaryClick};
+            background-color: ${theme?.buttonPrimaryClick};
         }
         outline: none;
     }
@@ -171,7 +171,7 @@ export const GrayButton = styled(ButtonBaseStyled)`
     &:active {
         background-color: ${theme.buttonSecondaryNormal};
         ${ButtonContainerStyled}:after {
-            background-color: ${theme.buttonSecondaryClick};
+            background-color: ${theme?.buttonSecondaryClick};
         }
         outline: none;
     }

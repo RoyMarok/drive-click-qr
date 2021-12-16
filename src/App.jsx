@@ -1,22 +1,23 @@
 import React from 'react'
 import QRCode from 'qrcode.react'
-import { isEmpty, parseInt, sortBy } from 'lodash'
-import IMask from 'imask'
-import copy from 'copy-to-clipboard'
 import { withAxios } from 'react-axios'
-import { animateScroll } from 'react-scroll'
 
-import { ReactComponent as ArrowLeft } from './components/icon/common/ic-24-arrow-left.svg'
-import { Calculator } from './Calculator'
-import { WrapperStyled, QrStyled, NonPrintablePanelStyled, NonPrintableText, PrintablePanelStyled, IconWrapperStyled } from './components/styles/wrapper.style'
+import { ReactComponent as Shield } from './components/icon/common/ic-24-shield-check.svg'
+import { ReactComponent as Document } from './components/icon/common/ic-24-document-check.svg'
+import { ReactComponent as Passport } from './components/icon/common/ic-24-passport.svg'
+import { WrapperStyled, QrStyled, PanelStyled, IconWrapperStyled, FlexWrapperStyled, RightButtonStyled, MarkupStyled, MarkupTextStyled, ContentStyled } from './components/styles/wrapper.style'
 import * as lightTheme from './components/styles/light.theme.style'
-import { makeMoneyMask } from './components/utils'
-import { ButtonClassic } from './components/button'
+import { HeadlineStyled, TextStyled } from './components/styles/headline.style'
+import { makeMoneyMask, formatNumber, makeSearchObj } from './components/utils'
 import { withLabel } from './components/labeled'
+import { LabeledSlider } from './components/slider'
 import { Link } from './components/link'
 
+const DEX_RADIX = 10
 const INITIAL_LOW = 0.2
 const INITIAL_HIGH = 0.9
+const MAX_CREDIT_AMOUNT = 2000000
+const percent = 7.2
 
 const urlParams = [
     'isNewCar',
@@ -25,10 +26,7 @@ const urlParams = [
     'carPrice',
     'downPayment',
     'durationMonth',
-    'incomeStatement',
-    // 'programsChildren',
-    // 'programsFirstCar',
-    // 'tradeIn'
+    // 'incomeStatement'
 ]
 
 const durationDefaultList = [{
@@ -54,24 +52,30 @@ const durationDefaultList = [{
     "value": "84"
 }]
 
-const LabeledButton = withLabel(ButtonClassic)
+const getMonthlyPayment = ({ percent, creditSum, term }) => {
+    const perMonthPercent = percent / 12 / 100
+    const koeff = Math.pow((1 + perMonthPercent), term)
+    const koeff2 = (perMonthPercent * koeff) / (koeff - 1)
+    return Math.ceil(creditSum * koeff2)
+}
+
+const LabeledText = withLabel(TextStyled)
 
 const makeUrl = ({ state, partnerSource }) => {
-    const passedCarPrice = parseInt(state.carPrice)
+    const passedCarPrice = parseInt(state.carPrice, DEX_RADIX)
     const passedState = {
         ...state,
-        carPrice: String(passedCarPrice + (state.add20 ? passedCarPrice*.2 : parseInt(state.additional || 0))),
+        carPrice: String(passedCarPrice + (state.add20 ? passedCarPrice * .2 : parseInt(state.additional || 0, DEX_RADIX))),
         additional: false
     }
     const passedParnterSource = partnerSource.replace(/\D/ig, '')
-    console.log('makeUrl', partnerSource, passedParnterSource)
     const urlParts = urlParams
             .map(
                 (key) =>
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=drom${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
 }
 
 class App extends React.PureComponent {
@@ -81,8 +85,9 @@ class App extends React.PureComponent {
         model: '',
         carPrice: 1200000,
         downPayment: 400000,
+        creditAmount: 800000,
         additional: '',
-        add20: true,
+        add20: false,
         durationMonth: 36,
         incomeStatement: false,
         programsChildren: false,
@@ -96,113 +101,131 @@ class App extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.props.axios('/car-list.json').then(result => {
-          this.setState({ carList: sortBy(result.data, ['title']) })
-        })
-        this.props.axios('/duration.json').then(result => {
-          this.setState({ duration: result.data })
-        })
+        const { location } = this.props
+        const search = makeSearchObj(location?.search)
+        const passedCreditAmount = Math.min(MAX_CREDIT_AMOUNT, search?.desired_credit_amount)
+        const desiredCarAmount = parseInt(search?.desired_credit_amount, DEX_RADIX) + parseInt(search?.down_payment, DEX_RADIX)
+        const pasedDownPayment = desiredCarAmount - passedCreditAmount
+
+        if (search?.desired_credit_amount) {
+            this.setState({
+                creditAmount: passedCreditAmount,
+                carPrice: passedCreditAmount + pasedDownPayment
+            })
+        }
+        if (search?.desired_credit_term) {
+            this.setState({
+                durationMonth: search?.desired_credit_term
+            })
+        }
+        if (search?.down_payment) {
+            this.setState({
+                downPayment: pasedDownPayment
+            })
+        }
       }
 
     handleChange = (newValues) => {
         const errors = {}
-        const carPrice = newValues?.carPrice || this.state.carPrice
-        const downPayment = newValues?.downPayment || this.state.downPayment
-        const initialRate = downPayment / carPrice
-        const minInitial = parseInt(carPrice*INITIAL_LOW)
-        const maxInitial = parseInt(carPrice*INITIAL_HIGH)
-        const masked = IMask.createMask(makeMoneyMask({ scale: '0', radix: ' ' }))
-
-        if ( initialRate < INITIAL_LOW) {
-            errors['downPayment'] = `Слишком маленький первоначальный взнос. Меньше ${masked.resolve(String(minInitial))} ₽`
-        } else 
-        if ( initialRate > INITIAL_HIGH) {
-            errors['downPayment'] = `Слишком большой первоначальный взнос. Больше ${masked.resolve(String(maxInitial))} ₽`
-        }
         this.setState({
             ...newValues,
             errors
         })
     }
 
-    handleShowQR = () => {
-        let stateSetProps = {
-            showQR: true,
-            showCalc: false
-        }
-        if (this.state.isNewCar === '') {
-            stateSetProps = {
-                errors: {
-                    isNewCar: 'Выберете новый или подержаный'
-                }
-            }
-        }
-        this.setState(stateSetProps)
-        animateScroll.scrollToTop({})
-    }
-
-    handleShowCalc = () => {
-        this.setState({
-            showQR: false,
-            showCalc: true,
-            copy: ''
+    handleChangeCarPrice = (value) => {
+        this.handleChange({
+            creditAmount: value,
+            carPrice: parseInt(value, DEX_RADIX) + parseInt(this.state.downPayment, DEX_RADIX)
         })
     }
 
-    handleCopyToClipboard = () => {
-        const { location } = this.props
-        const partnerSource = location?.pathname?.substring(1)
-        copy(makeUrl({ state: this.state, partnerSource }))
-        this.setState({
-            copy: 'Скопировано'
+    handleChangeDuration = (value) => {
+        this.handleChange({
+            durationMonth: value
         })
     }
 
-    handlePrint = () => {
-        window.print()
-    }
 
     render () {
         const { location } = this.props
         const partnerSource = location?.pathname?.substring(1)
-        const calculatorProps = {
-            ...this.state,
-            onChange: this.handleChange,
-            errors: this.state.errors,
-            carList: this.state.carList
-        }
+        const monthlyPayment = getMonthlyPayment({
+            percent,
+            creditSum: this.state.creditAmount,
+            term: this.state.durationMonth
+        })
         
         const urlSmartLink = makeUrl({ state: this.state, partnerSource })
         const qrProps = {
             value: urlSmartLink,
             renderAs: 'svg',
-            size: 544
+            size: 212
         }
 
         return (
             <WrapperStyled>
-                {this.state.showCalc && <NonPrintablePanelStyled>
-                    <Calculator {...calculatorProps} theme={lightTheme} />
-                    <ButtonClassic title="Показать QR-код" fontWeight="semibold" fullWidth onClick={this.handleShowQR} />
-                </NonPrintablePanelStyled>}
-                {this.state.showQR && isEmpty(this.state.erros) && <PrintablePanelStyled>
-                    <NonPrintableText>
-                        <Link size="lg" colorScheme="primary" fontWeight="semibold" href="#" onClick={this.handleShowCalc} title="Изменить параметры" iconReverse="false">
-                            <IconWrapperStyled>
-                                <ArrowLeft />
-                            </IconWrapperStyled>
-                        </Link>
-                    </NonPrintableText>
-                    <QrStyled>
-                        <QRCode {...qrProps} />
-                    </QrStyled>
-                    <NonPrintableText>
-                        <LabeledButton title="Скопировать ссылку" fullWidth mode="secondary" onClick={this.handleCopyToClipboard} error={this.state?.copy} />
-                        <ButtonClassic title="Напечатать QR-код" mode="secondary" fullWidth onClick={this.handlePrint}/>
-                        <ButtonClassic title="Перейти в СберБанк Online" mode="secondary" fullWidth as="a" href={urlSmartLink} target="_blank"/>
-                    </NonPrintableText>
-                </PrintablePanelStyled>}
-                
+                <HeadlineStyled variant="h3">{'Предварительный расчёт кредита'}</HeadlineStyled>
+                <div>
+                    <LabeledSlider
+                        min={300000}
+                        max={2000000}
+                        step={10000}
+                        suffix=" ₽"
+                        label="Необходимая сумма кредита"
+                        value={this.state.creditAmount}
+                        mode="segmented"
+                        onChange={this.handleChangeCarPrice}
+                        // colorScheme="primary"
+                        theme={lightTheme}
+                    />
+                </div>
+                <div>
+                    <LabeledSlider
+                        options={this.state.duration}
+                        label="Срок кредта"
+                        value={this.state.durationMonth}
+                        mode="segmented"
+                        onChange={this.handleChangeDuration}
+                        // colorScheme="primary"
+                        theme={lightTheme}
+                    />
+                </div>
+                <FlexWrapperStyled>
+                    <LabeledText label="Платеж в месяц от" variant="h2" >{`${formatNumber(monthlyPayment, makeMoneyMask({ padFractionalZeros: false }))} ₽`}</LabeledText>
+                    <RightButtonStyled title="Далее" fontWeight="semibold" size="lg" description="Нажимая далее, вы переходите в СберБанк Онлайн" as="a" href={urlSmartLink} target="_blank" fullWidth verticalMargin="nano" />
+                </FlexWrapperStyled>
+
+                <MarkupStyled verticalMargin="inner">
+                    <IconWrapperStyled>
+                        <Shield />
+                    </IconWrapperStyled>
+                    <TextStyled variant="h4" fontWeight="regular">{'Без обязательного КАСКО'}</TextStyled>
+                </MarkupStyled>
+                <MarkupStyled verticalMargin="inner">
+                    <IconWrapperStyled>
+                        <Document />
+                    </IconWrapperStyled>
+                    <TextStyled variant="h4" fontWeight="regular">{'Без справок о доходе и поручителей'}</TextStyled>
+                </MarkupStyled>
+                <MarkupStyled verticalMargin="inner">
+                    <IconWrapperStyled>
+                        <Passport />
+                    </IconWrapperStyled>
+                    <MarkupTextStyled>
+                        <TextStyled variant="h4" fontWeight="regular">{'Понадобятся только паспорт и водительское удостоверение'}</TextStyled>
+                    </MarkupTextStyled>
+                </MarkupStyled>
+
+                <Link size="md" colorScheme="primary" fontWeight="regular" href="https://www.sberbank.ru/ru/person/credits/money/cetelem" title="Узнать подробнее про условия кредита" iconReverse="false" verticalMargin="inner" underlined/>
+
+                <PanelStyled verticalMargin="inner">
+                    <ContentStyled size="h3" verticalPadding="inner">
+                        <HeadlineStyled variant="h4">{'Удобнее через мобильное приложение?'}</HeadlineStyled>
+                        <TextStyled variant="h4" fontWeight="regular">{'Отсканируй QR-код для перехода в СберБанк Онлайн'}</TextStyled>
+                    </ContentStyled>
+                    <QrStyled><QRCode {...qrProps} /></QrStyled>
+                </PanelStyled>
             </WrapperStyled>
         )
     }

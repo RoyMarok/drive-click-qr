@@ -1,10 +1,12 @@
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
+import styled from '@emotion/styled/macro'
+import { css } from '@emotion/react/macro'
 
-import { xsBorderRadius } from '../../styles/radius.config.style'
-import { Typography } from '../../typography'
-import { xxsShadow, xsShadow } from '../../styles/shadows.config.style'
-import { sbolEase } from '../../styles/animation-timing-functions'
+import { xsBorderRadius } from '../styles/radius.config.style'
+import { Typography } from '../styles/common.config.style'
+import { xxsShadow, xsShadow } from '../styles/shadows.config.style'
+import { sbolEase } from '../styles/animation-timing-functions'
+
+import * as theme from '../styles/light.theme.style'
 
 export const SliderStyled = styled.div`
     position: relative;
@@ -28,7 +30,7 @@ export const SliderBasicStyled = styled.div`
     transition: 0.17s ease-in-out;
 `
 
-export const ProgressStyled = styled.div(({ theme, leftOffset, transitionDuration }) => css`
+export const ProgressStyled = styled.div(({  leftOffset, transitionDuration }) => css`
     z-index: 1;
     height: 4px;
     width: ${leftOffset};
@@ -42,7 +44,7 @@ export const ProgressStyled = styled.div(({ theme, leftOffset, transitionDuratio
     background-color: ${theme.fieldToggleBorderNormal};
 `)
 
-export const ThumbStyled = styled.div(({ theme, leftOffset, transitionDuration }) => css`
+export const ThumbStyled = styled.div(({  leftOffset, transitionDuration }) => css`
     text-align: center;
     background-color: ${theme.fieldToggleBody};
     border: 4px solid ${theme.fieldToggleBorderNormal};

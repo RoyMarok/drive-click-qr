@@ -154,12 +154,12 @@ export const InputStyled = styled.input(css `
 
             &:disabled {
                 & ~ ${CheckboxTypographyStyled} {
-                    color: ${theme.selectionDisableText};
+                    color: ${theme?.selectionDisableText};
                 }
 
                 &:hover ~ ${CheckboxTypographyStyled} {
                     cursor: default;
-                    color: ${theme.selectionDisableText};
+                    color: ${theme?.selectionDisableText};
                 }
             }
         `
