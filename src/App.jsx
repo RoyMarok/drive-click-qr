@@ -190,7 +190,6 @@ class App extends React.PureComponent {
                         value={this.state.durationMonth}
                         mode="segmented"
                         onChange={this.handleChangeDuration}
-                        // colorScheme="primary"
                         theme={lightTheme}
                     />
                 </div>
