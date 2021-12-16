@@ -97,10 +97,16 @@ class App extends React.PureComponent {
         carList: [],
         duration: durationDefaultList,
         showQR: false,
-        showCalc: true
+        showCalc: true,
+        percent: 7.2
     }
 
     componentWillMount() {
+
+        this.props.axios('config.json').then(result => {
+            this.setState({...result.data})
+        })
+
         const { location } = this.props
         const search = makeSearchObj(location?.search)
         const passedCreditAmount = Math.min(MAX_CREDIT_AMOUNT, search?.desired_credit_amount)
