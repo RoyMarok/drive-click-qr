@@ -104,7 +104,7 @@ export const ItemStyled = styled.button(({ size, focused, checked, isOption }) =
     ${paddingStyle({
         size,
         horizontalPadding: 'inner',
-        verticalPadding: 'zero'
+        verticalPadding: 'inner'
     })};
     cursor: ${isOption ? 'pointer' : 'default'};
 
