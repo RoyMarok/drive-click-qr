@@ -17,6 +17,7 @@ const DEX_RADIX = 10
 const INITIAL_LOW = 0.2
 const INITIAL_HIGH = 0.9
 const MAX_CREDIT_AMOUNT = 2000000
+const MIN_CREDIT_AMOUNT = 300000
 const percent = 7.2
 
 const urlParams = [
@@ -26,6 +27,7 @@ const urlParams = [
     'carPrice',
     'downPayment',
     'durationMonth',
+    'source'
     // 'incomeStatement'
 ]
 
@@ -74,7 +76,7 @@ const makeUrl = ({ state }) => {
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=drom`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}`
 }
 
 class App extends React.PureComponent {
@@ -106,26 +108,19 @@ class App extends React.PureComponent {
         })
 
         const search = makeSearchObj(document.URL.split('?').pop())
+        const passedCarAmount = search?.carPrice
+        const passedCreditAmount = Math.min(MAX_CREDIT_AMOUNT, passedCarAmount - search?.downPayment)
+        const pasedDownPayment = passedCarAmount - passedCreditAmount
 
-        console.log('componentWillMount', document.URL.split('?').pop(), search)
-        const passedCreditAmount = Math.min(MAX_CREDIT_AMOUNT, search?.desired_credit_amount)
-        const desiredCarAmount = parseInt(search?.desired_credit_amount, DEX_RADIX) + parseInt(search?.down_payment, DEX_RADIX)
-        const pasedDownPayment = desiredCarAmount - passedCreditAmount
-
-        if (search?.desired_credit_amount) {
+        if (passedCarAmount) {
             this.setState({
                 creditAmount: passedCreditAmount,
-                carPrice: passedCreditAmount + pasedDownPayment
-            })
-        }
-        if (search?.desired_credit_term) {
-            this.setState({
-                durationMonth: search?.desired_credit_term
-            })
-        }
-        if (search?.down_payment) {
-            this.setState({
-                downPayment: pasedDownPayment
+                carPrice: passedCarAmount,
+                durationMonth: search?.durationMonth,
+                downPayment: pasedDownPayment,
+                brand: decodeURI(search?.brand).toUpperCase(),
+                model: decodeURI(search?.model).toUpperCase(),
+                source: search?.source
             })
         }
       }
@@ -151,10 +146,9 @@ class App extends React.PureComponent {
         })
     }
 
-
     render () {
         const monthlyPayment = getMonthlyPayment({
-            percent,
+            percent: this.state.percent,
             creditSum: this.state.creditAmount,
             term: this.state.durationMonth
         })
@@ -168,25 +162,24 @@ class App extends React.PureComponent {
 
         return (
             <WrapperStyled>
-                <HeadlineStyled variant="h3">{'Предварительный расчёт кредита'}</HeadlineStyled>
+                <HeadlineStyled variant="h3" indent="zero">{'Предварительный расчёт кредита'}</HeadlineStyled>
                 <div>
                     <LabeledSlider
-                        min={300000}
-                        max={2000000}
+                        min={MIN_CREDIT_AMOUNT}
+                        max={MAX_CREDIT_AMOUNT}
                         step={10000}
                         suffix=" ₽"
                         label="Необходимая сумма кредита"
                         value={this.state.creditAmount}
                         mode="segmented"
                         onChange={this.handleChangeCarPrice}
-                        // colorScheme="primary"
                         theme={lightTheme}
                     />
                 </div>
                 <div>
                     <LabeledSlider
                         options={this.state.duration}
-                        label="Срок кредта"
+                        label="Срок кредита"
                         value={this.state.durationMonth}
                         mode="segmented"
                         onChange={this.handleChangeDuration}
@@ -194,37 +187,75 @@ class App extends React.PureComponent {
                     />
                 </div>
                 <FlexWrapperStyled>
-                    <LabeledText label="Платеж в месяц от" variant="h2" >{`${formatNumber(monthlyPayment, makeMoneyMask({ padFractionalZeros: false }))} ₽`}</LabeledText>
-                    <RightButtonStyled title="Далее" fontWeight="semibold" size="lg" description="Нажимая далее, вы переходите в СберБанк Онлайн" as="a" href={urlSmartLink} target="_blank" fullWidth verticalMargin="nano" />
+                    <LabeledText
+                        label="Платеж в месяц от"
+                        variant="h2"
+                        indent="zero"
+                    >
+                        {`${
+                            formatNumber(
+                                monthlyPayment,
+                                makeMoneyMask({ padFractionalZeros: false })
+                            )
+                        } ₽`}
+                    </LabeledText>
+                    <RightButtonStyled
+                        title="Далее"
+                        fontWeight="semibold"
+                        size="lg"
+                        description="Нажимая далее, вы переходите в СберБанк Онлайн"
+                        as="a"
+                        href={urlSmartLink}
+                        target="_blank"
+                        fullWidth
+                        verticalMargin="nano"
+                    />
                 </FlexWrapperStyled>
 
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
                         <Shield />
                     </IconWrapperStyled>
-                    <TextStyled variant="h4" fontWeight="regular">{'Без обязательного КАСКО'}</TextStyled>
+                    <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без обязательного КАСКО'}</TextStyled>
                 </MarkupStyled>
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
                         <Document />
                     </IconWrapperStyled>
-                    <TextStyled variant="h4" fontWeight="regular">{'Без справок о доходе и поручителей'}</TextStyled>
+                    <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без справок о доходе и поручителей'}</TextStyled>
                 </MarkupStyled>
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
                         <Passport />
                     </IconWrapperStyled>
                     <MarkupTextStyled>
-                        <TextStyled variant="h4" fontWeight="regular">{'Понадобятся только паспорт и водительское удостоверение'}</TextStyled>
+                        <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Понадобятся только паспорт и водительское удостоверение'}</TextStyled>
                     </MarkupTextStyled>
                 </MarkupStyled>
 
-                <Link size="md" colorScheme="primary" fontWeight="regular" href="https://www.sberbank.ru/ru/person/credits/money/cetelem" title="Узнать подробнее про условия кредита" iconReverse="false" verticalMargin="inner" underlined/>
+                <Link
+                    size="md"
+                    colorScheme="primary"
+                    fontWeight="regular"
+                    href="https://www.sberbank.ru/ru/person/credits/money/cetelem"
+                    title="Узнать подробнее про условия кредита"
+                    iconReverse="false"
+                    verticalMargin="inner"
+                    underlined
+                    target="_blank"
+                />
 
                 <PanelStyled verticalMargin="inner">
                     <ContentStyled size="h3" verticalPadding="inner">
                         <HeadlineStyled variant="h4">{'Удобнее через мобильное приложение?'}</HeadlineStyled>
-                        <TextStyled variant="h4" fontWeight="regular">{'Отсканируй QR-код для перехода в СберБанк Онлайн'}</TextStyled>
+                        <TextStyled
+                            variant="md"
+                            fontWeight="regular"
+                            color="secondary"
+                            theme={lightTheme}
+                        >
+                            {'Отсканируй QR-код для перехода в СберБанк Онлайн'}
+                        </TextStyled>
                     </ContentStyled>
                     <QrStyled><QRCode {...qrProps} /></QrStyled>
                 </PanelStyled>

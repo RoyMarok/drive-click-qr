@@ -43,6 +43,9 @@ export const IconWrapperStyled = styled.div`
     margin-top: -2px;
     margin-right: 8px;
     width: 24px;
+    height: 24px;
+    margin-right: 24px;
+    text-align: center;
 `
 
 export const PanelStyled = styled.div`

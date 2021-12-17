@@ -167,4 +167,5 @@ export const BoundariesStyled = styled(Typography)`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: ${theme.secondary}
 `

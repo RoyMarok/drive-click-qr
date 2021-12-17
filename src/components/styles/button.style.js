@@ -37,6 +37,7 @@ const dynamicTypographyHorizontalIndent = ({ size = 'md', icon, iconReverse }) =
 }
 
 export const ButtonTypographyStyled = styled(Typography)`
+    font-family: 'SBSansTextMedium';
     display: inline-block;
 `
 

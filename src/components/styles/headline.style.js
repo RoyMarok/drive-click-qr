@@ -13,7 +13,9 @@ import {
     lineHeightHeadline3,
     lineHeightHeadline4,
     lineHeightHeadline5,
-    letterSpacingHeadline
+    letterSpacingHeadline,
+    fontSizeMd,
+    lineHeightMd
 } from './font-sizes.config.style'
 
 const openspaceConst = 'open'
@@ -43,6 +45,11 @@ const variantStyle = {
         fontSize: fontSizeHeadline5,
         lineHeight: lineHeightHeadline5,
         paddingBottom: 0
+    },
+    md: {
+        fontSize: fontSizeMd,
+        lineHeight: lineHeightMd,
+        paddingBottom: 0
     }
 }
 
@@ -59,15 +66,18 @@ export const modeStyles = ({ variant = 'h1', fontWeight = 'semibold', indent = '
         line-height: ${modeStyle.lineHeight};
         letter-spacing: ${letterSpacingHeadline};
         font-weight: ${fontWeightStyle[fontWeight] || fontWeightStyle.semibold};
-        /* font-family: SBSansDisplay, Arial, Helvetica, sans-serif; */
+        ${fontWeight === 'semibold' && "font-family: 'SBSansDisplaySemibold';"}
         margin: 0;
         padding: 0;
-        /* padding-top: ${dynamicIndent(variant, indent)}; */
+        padding-top: ${dynamicIndent(variant, indent)};
         padding-bottom: ${indent === openspaceConst ? modeStyle.paddingBottom : dynamicIndent(variant, indent)};
     `
 }
 
-export const HeadlineStyled = styled.h1(modeStyles, ({ theme }) => dynamicColor(theme.primary))
+export const HeadlineStyled = styled.div(modeStyles, ({ theme }) => dynamicColor(theme.primary))
 
-export const TextStyled = styled.div(modeStyles, ({ theme }) => dynamicColor(theme.primary))
+export const TextStyled = styled.div(modeStyles, ({
+    theme,
+    color = 'primary'
+}) => dynamicColor(theme[color]))
 
