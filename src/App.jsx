@@ -71,7 +71,7 @@ const makeUrl = ({ state, partnerSource }) => {
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=dealer${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
+    return `https://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=selection${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
 }
 
 class App extends React.PureComponent {
