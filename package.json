@@ -1,7 +1,7 @@
 {
   "name": "react-qr",
   "version": "0.1.0",
-  "homepage": "/sbol-frame",
+  "homepage": "/hdclassified",
   "private": true,
   "dependencies": {
     "@emotion/babel-plugin": "11.3.0",

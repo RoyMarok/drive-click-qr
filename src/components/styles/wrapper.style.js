@@ -21,9 +21,17 @@ export const WrapperStyled = styled.div(() => css`
     /* a {
         text-decoration: none;
     } */
-    padding: 48px 64px 44px;
-    width: 680px;
+    /* padding: 48px 64px 44px; */
+    margin-left: 44px;
+    max-width: 552px;
+    margin: 0 16px;
+    margin-top: 44px;
+    @media (max-width: 600px) {
+        
+    }
 `)
+
+export const WrapperBlockStyled = styled.div``.withComponent(MarginWrapper)
 
 export const FlexWrapperStyled = styled.div`
     display: flex;
@@ -33,6 +41,7 @@ export const FlexWrapperStyled = styled.div`
     align-items: flex-start;
     justify-content: space-between;
 `
+.withComponent(MarginWrapper)
 
 export const RightButtonStyled = styled(withLabel(ButtonClassic))`
     width: 402px;
@@ -56,10 +65,13 @@ export const PanelStyled = styled.div`
     border-radius: ${smBorderRadius};
     box-shadow: ${xxsShadow(theme)}, ${commonShadow(theme)};
     position: relative;
-    padding-left: ${dynamicIndent('h3', 'inner')};
+    padding: ${dynamicIndent('h3', 'inner')};
     font-size: ${fontSizeMd};
     line-height: ${lineHeightMd};
     min-height: 156px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
 `
     .withComponent(MarginWrapper)
 
@@ -88,11 +100,19 @@ export const QrStyled = styled.div(css`
     position: relative;
     width: 184px;
     height: 184px;
-    padding: ${dynamicIndent('h3', 'inner')};
+    /* padding: ${dynamicIndent('h3', 'inner')}; */
     svg {
         position: relative;
-        width: 100%;
+        width: 184px;
+        height: 184px;
+    }
+    @media (max-width: 600px) {
         height: 100%;
+        width: 100%;
+        svg {
+            height: 100%;
+            width: 100%;
+        }
     }
 `)
 
@@ -104,10 +124,11 @@ export const MarkupStyled = styled(MarginWrapper)`
     align-items: flex-start;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 `
 
 export const MarkupTextStyled = styled(MarginWrapper)`
-    width: 500px;
+    width: calc(100% - 48px);
 `
 
 export const Container = styled.div `
@@ -126,6 +147,10 @@ export const Container = styled.div `
 
 
 export const ContentStyled = styled(Container)`
-    width: 344px;
+    max-width: 320px;
+    width: 100%;
     flex-shrink: 0;
+    @media (max-width: 600px) {
+        max-width: 100%;
+    }
 `

@@ -5,7 +5,7 @@ import { withAxios } from 'react-axios'
 import { ReactComponent as Shield } from './components/icon/common/ic-24-shield-check.svg'
 import { ReactComponent as Document } from './components/icon/common/ic-24-document-check.svg'
 import { ReactComponent as Passport } from './components/icon/common/ic-24-passport.svg'
-import { WrapperStyled, QrStyled, PanelStyled, IconWrapperStyled, FlexWrapperStyled, RightButtonStyled, MarkupStyled, MarkupTextStyled, ContentStyled } from './components/styles/wrapper.style'
+import { WrapperStyled, WrapperBlockStyled, QrStyled, PanelStyled, IconWrapperStyled, FlexWrapperStyled, RightButtonStyled, MarkupStyled, MarkupTextStyled, ContentStyled } from './components/styles/wrapper.style'
 import * as lightTheme from './components/styles/light.theme.style'
 import { HeadlineStyled, TextStyled } from './components/styles/headline.style'
 import { makeMoneyMask, formatNumber, makeSearchObj } from './components/utils'
@@ -81,7 +81,7 @@ const makeUrl = ({ state }) => {
 
 class App extends React.PureComponent {
     state = {
-        isNewCar: '',
+        isNewCar: false,
         brand: '',
         model: '',
         carPrice: 1200000,
@@ -120,7 +120,8 @@ class App extends React.PureComponent {
                 downPayment: pasedDownPayment,
                 brand: decodeURI(search?.brand).toUpperCase(),
                 model: decodeURI(search?.model).toUpperCase(),
-                source: search?.source
+                source: search?.source,
+                isNewCar: search?.isNewCar
             })
         }
       }
@@ -154,10 +155,16 @@ class App extends React.PureComponent {
         })
         
         const urlSmartLink = makeUrl({ state: this.state })
+        const urlSmartLinkQR = makeUrl({ 
+            state: {
+                ...this.state,
+                source: `${this.state.source}jjjqr`
+            } 
+        })
         const qrProps = {
-            value: urlSmartLink,
+            value: urlSmartLinkQR,
             renderAs: 'svg',
-            size: 212
+            size: 184
         }
 
         return (
@@ -186,43 +193,52 @@ class App extends React.PureComponent {
                         theme={lightTheme}
                     />
                 </div>
-                <FlexWrapperStyled>
-                    <LabeledText
-                        label="Платеж в месяц от"
-                        variant="h2"
-                        indent="zero"
-                    >
-                        {`${
-                            formatNumber(
+                <FlexWrapperStyled verticalMargin="nano">
+                    <WrapperBlockStyled verticalMargin="nano">
+                        <LabeledText
+                            label="Платеж в месяц от"
+                            variant="h2"
+                            indent="zero"
+                            verticalMargin="zero"
+                            verticalMarginDirection="top"
+                        >
+                            {`${formatNumber(
                                 monthlyPayment,
                                 makeMoneyMask({ padFractionalZeros: false })
                             )
-                        } ₽`}
-                    </LabeledText>
-                    <RightButtonStyled
-                        title="Далее"
-                        fontWeight="semibold"
-                        size="lg"
-                        description="Нажимая далее, вы переходите в СберБанк Онлайн"
-                        as="a"
-                        href={urlSmartLink}
-                        target="_blank"
-                        fullWidth
-                        verticalMargin="nano"
-                    />
+                                } ₽`}
+                        </LabeledText>
+                    </WrapperBlockStyled>
+                    <WrapperBlockStyled verticalMargin="nano">
+                        <RightButtonStyled
+                            title="Далее"
+                            fontWeight="semibold"
+                            size="lg"
+                            description="Нажимая далее, вы переходите в СберБанк Онлайн"
+                            as="a"
+                            href={urlSmartLink}
+                            target="_blank"
+                            fullWidth
+                            verticalMargin="zero"
+                        />
+                    </WrapperBlockStyled>
                 </FlexWrapperStyled>
 
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
                         <Shield />
                     </IconWrapperStyled>
-                    <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без обязательного КАСКО'}</TextStyled>
+                    <MarkupTextStyled>
+                        <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без обязательного КАСКО'}</TextStyled>
+                    </MarkupTextStyled>
                 </MarkupStyled>
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
                         <Document />
                     </IconWrapperStyled>
-                    <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без справок о доходе и поручителей'}</TextStyled>
+                    <MarkupTextStyled>
+                        <TextStyled variant="h4" fontWeight="regular" indent="zero">{'Без справок о доходе и поручителей'}</TextStyled>
+                    </MarkupTextStyled>  
                 </MarkupStyled>
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
@@ -237,7 +253,8 @@ class App extends React.PureComponent {
                     size="md"
                     colorScheme="primary"
                     fontWeight="regular"
-                    href="https://www.sberbank.ru/ru/person/credits/money/cetelem"
+                    // href="https://www.sberbank.ru/ru/person/credits/money/cetelem"
+                    href="https://www.cetelem.ru/upload/iblock/1da/TP_VASH-VYBOR_KLASSIFAYD_20211215.pdf"
                     title="Узнать подробнее про условия кредита"
                     iconReverse="false"
                     verticalMargin="inner"
