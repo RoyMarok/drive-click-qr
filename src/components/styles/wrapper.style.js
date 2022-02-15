@@ -44,7 +44,7 @@ export const FlexWrapperStyled = styled.div`
 .withComponent(MarginWrapper)
 
 export const RightButtonStyled = styled(withLabel(ButtonClassic))`
-    width: 402px;
+    width: 390px;
 `
 
 export const IconWrapperStyled = styled.div`

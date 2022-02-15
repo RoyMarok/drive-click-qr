@@ -154,7 +154,12 @@ class App extends React.PureComponent {
             term: this.state.durationMonth
         })
         
-        const urlSmartLink = makeUrl({ state: this.state })
+        const urlSmartLink = makeUrl({ 
+            state: {
+                ...this.state,
+                source: `${this.state.source}jjjiframe`
+            } 
+        })
         const urlSmartLinkQR = makeUrl({ 
             state: {
                 ...this.state,
@@ -193,36 +198,37 @@ class App extends React.PureComponent {
                         theme={lightTheme}
                     />
                 </div>
-                <FlexWrapperStyled verticalMargin="nano">
-                    <WrapperBlockStyled verticalMargin="nano">
-                        <LabeledText
-                            label="Платеж в месяц от"
-                            variant="h2"
-                            indent="zero"
-                            verticalMargin="zero"
-                            verticalMarginDirection="top"
-                        >
-                            {`${formatNumber(
-                                monthlyPayment,
-                                makeMoneyMask({ padFractionalZeros: false })
-                            )
-                                } ₽`}
-                        </LabeledText>
-                    </WrapperBlockStyled>
-                    <WrapperBlockStyled verticalMargin="nano">
-                        <RightButtonStyled
-                            title="Далее"
-                            fontWeight="semibold"
-                            size="lg"
-                            description="Нажимая далее, вы переходите в СберБанк Онлайн"
-                            as="a"
-                            href={urlSmartLink}
-                            target="_blank"
-                            fullWidth
-                            verticalMargin="zero"
-                        />
-                    </WrapperBlockStyled>
-                </FlexWrapperStyled>
+                <WrapperBlockStyled verticalMargin="open">
+                    <FlexWrapperStyled verticalMargin="inner">
+                        
+                            <LabeledText
+                                label="Платеж в месяц от"
+                                variant="h2"
+                                indent="zero"
+                                verticalMargin="nano"
+                                verticalMarginDirection="bottom"
+                            >
+                                {`${formatNumber(
+                                    monthlyPayment,
+                                    makeMoneyMask({ padFractionalZeros: false })
+                                )
+                                    } ₽`}
+                            </LabeledText>
+
+                            <RightButtonStyled
+                                title="Далее"
+                                fontWeight="semibold"
+                                size="lg"
+                                description="Нажимая далее, вы переходите в СберБанк Онлайн"
+                                as="a"
+                                href={urlSmartLink}
+                                target="_blank"
+                                fullWidth
+                                verticalMargin="zero"
+                            />
+                        
+                    </FlexWrapperStyled>
+                </WrapperBlockStyled>
 
                 <MarkupStyled verticalMargin="inner">
                     <IconWrapperStyled>
