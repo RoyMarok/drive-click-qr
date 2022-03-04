@@ -89,7 +89,7 @@ class App extends React.PureComponent {
         creditAmount: 800000,
         additional: '',
         add20: false,
-        durationMonth: 36,
+        durationMonth: 72,
         incomeStatement: false,
         programsChildren: false,
         programsFirstCar: false,
@@ -99,7 +99,8 @@ class App extends React.PureComponent {
         duration: durationDefaultList,
         showQR: false,
         showCalc: true,
-        percent: 7.2
+        percent: 19.9,
+        source: ''
     }
 
     componentWillMount() {
@@ -116,10 +117,10 @@ class App extends React.PureComponent {
             this.setState({
                 creditAmount: passedCreditAmount,
                 carPrice: passedCarAmount,
-                durationMonth: search?.durationMonth,
+                // durationMonth: search?.durationMonth,
                 downPayment: pasedDownPayment,
-                brand: decodeURI(search?.brand).toUpperCase(),
-                model: decodeURI(search?.model).toUpperCase(),
+                // brand: decodeURI(search?.brand).toUpperCase(),
+                // model: decodeURI(search?.model).toUpperCase(),
                 source: search?.source,
                 isNewCar: search?.isNewCar
             })
@@ -157,13 +158,13 @@ class App extends React.PureComponent {
         const urlSmartLink = makeUrl({ 
             state: {
                 ...this.state,
-                source: `${this.state.source}jjjiframe`
+                source: this.state.source ? `${this.state.source}jjjiframe` : ''
             } 
         })
         const urlSmartLinkQR = makeUrl({ 
             state: {
                 ...this.state,
-                source: `${this.state.source}jjjqr`
+                source: this.state.source ? `${this.state.source}jjjqr` : ''
             } 
         })
         const qrProps = {
