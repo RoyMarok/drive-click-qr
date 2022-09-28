@@ -76,7 +76,7 @@ const makeUrl = ({ state }) => {
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `http://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}`
+    return `https://www.sberbank.com/sms/carloanrequest?${urlParts.join('&')}`
 }
 
 class App extends React.PureComponent {
