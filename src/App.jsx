@@ -71,7 +71,7 @@ const makeUrl = ({ state, partnerSource }) => {
                 (passedState[key] || passedState[key] === false) &&
                 `${key}=${passedState[key]}`)
             .filter((value) => Boolean(value))
-    return `http://www.sberbank.ru/sms/carloanrequest?${urlParts.join('&')}&source=selection${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
+    return `https://www.sberbank.com/sms/carloanrequest?${urlParts.join('&')}&source=selection${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
 }
 
 class App extends React.PureComponent {
@@ -82,7 +82,7 @@ class App extends React.PureComponent {
         carPrice: 1200000,
         downPayment: 400000,
         additional: '',
-        add20: false,
+        add20: true,
         durationMonth: 36,
         incomeStatement: false,
         programsChildren: false,
