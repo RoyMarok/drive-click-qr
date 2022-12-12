@@ -64,12 +64,11 @@ const makeUrl = ({ state, partnerSource }) => {
         additional: false
     }
     const passedParnterSource = partnerSource.replace(/\D/ig, '')
-    console.log('makeUrl', partnerSource, passedParnterSource)
     const urlParts = urlParams
             .map(
                 (key) =>
                 (passedState[key] || passedState[key] === false) &&
-                `${key}=${passedState[key]}`)
+                `${key}=${String(passedState[key]).replace(' ', '__')}`)
             .filter((value) => Boolean(value))
     return `https://www.sberbank.com/sms/carloanrequest?${urlParts.join('&')}&source=dealer${passedParnterSource ? `jjj${passedParnterSource}` : ''}`
 }
